@@ -4,15 +4,17 @@ const path = require('path');
 module.exports = (caminho, nomeDoArquivo, callbaclImagemCriada) => {
   const tiposValidos = ['jpg', 'png', 'jpeg'];
   const tipo = path.extname(caminho);
-  const tipoEhValido = tiposValidos.indexOf(tipo.substring(1));
+  const tipoEhValido = tiposValidos.indexOf(tipo.substring(1)) !== -1;
 
-  if (tipoEhValido === -1) {
-    console.log('Erro! Tipo inválido');
-  } else {
+  if (tipoEhValido) {
     const novoCaminho = `./assets/images/${nomeDoArquivo}${tipo}`;
 
     fs.createReadStream(caminho)
       .pipe(fs.createWriteStream(novoCaminho))
-      .on('finish', () => callbaclImagemCriada(novoCaminho));
+      .on('finish', () => callbaclImagemCriada(false, novoCaminho));
+  } else {
+    const erro = 'Tipo é inválido';
+    console.log('Erro! Tipo inválido');
+    callbaclImagemCriada(erro);
   }
 };
