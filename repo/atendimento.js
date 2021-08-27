@@ -11,7 +11,27 @@ class Atendimento {
 
     return query(sql);
   }
+
+  buscaPorId(id) {
+    const sql = `SELECT * FROM Atendimentos WHERE id=${id}`;
+
+    return query(sql, id);
+  }
+
+  altera(id, valores) {
+    if (valores.data) {
+      valores.data = moment(valores.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:MM:SS')
+    }
+    const sql = `UPDATE Atendimentos SET ? WHERE id=${id}`
+
+    return query(sql, valores, id);
+  }
+
+  delete(id) {
+    const sql = 'DELETE FROM Atendimentos WHERE id=?';
+
+    return query(sql, id);
+  }
 }
 
 module.exports = new Atendimento;
-
